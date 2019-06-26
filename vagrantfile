@@ -1,17 +1,30 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+require 'optparse'
+
+def get_provider
+  ret = nil
+  opt_parser = OptionParser.new do |opts|
+    opts.on("--provider provider") do |provider|
+      ret = provider
+    end
+  end
+  opt_parser.parse!(ARGV)
+  ret
+end
+provider = get_provider || "virtualbox"
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
-
-$script = <<SCRIPT
-# TODO: Put your install script here.
-SCRIPT
 
 # Change this to the name of the OpenVINO toolkit downloaded from Intel that you placed in the resources sub-directory
 # Tested with l_openvino_toolkit_p_2019.1.144.tgz
 # If this changes don't forget up update the openVINO_archive and openVINO_version variables in the provision/playbook.yml file
 $openVNIO_file = "l_openvino_toolkit_p_2019.1.144.tgz"
+
+# Change these variables to control CPU and Memory sizing
+CPUS = 2
+MEMORY = 3072
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # All Vagrant configuration is done here. The most common configuration
@@ -21,8 +34,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Every Vagrant virtual environment requires a box to build off of.
   # Official boxes are here: https://atlas.hashicorp.com/boxes/search
   # Additional boxes here: http://www.vagrantbox.es/
-  config.vm.box = "ubuntu/xenial64"
-  config.vm.box_version = "20190617.0.0"
+  config.vm.box = "generic/ubuntu1604"
+  config.vm.box_version = "1.9.16"
 
   # Port forwarding examples
   # Just in case you need to run a database server, web server, etc.
@@ -31,16 +44,23 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Mem/cpu config example.
   # If you need more CPUs/RAM, uncomment the next 4 lines and edit as needed.
-  config.vm.provider "virtualbox" do |v|
-    # These lines configure the USB forwarding into the VM for the NCS
-    v.customize ["modifyvm", :id, "--usbxhci", "on"]
-    v.customize ["usbfilter", "add", "0",  "--target", :id, "--name", "Intel NCS 1", "--active", "yes", "--vendorid", "03e7"]
-    v.customize ["usbfilter", "add", "1",  "--target", :id, "--name", "Intel NCS 2", "--active", "yes", "--vendorid", "040e"]
-    # Set memory and vCPU values here.  Adjust if required for your local machine
-    v.memory = 3072
-    v.cpus = 2
+  if provider == "virtualbox"
+    config.vm.provider "virtualbox" do |v|
+      # These lines configure the USB forwarding into the VM for the NCS
+      # Depreciated due to licensing issues with the virtualbox extension pack
+      # v.customize ["modifyvm", :id, "--usbxhci", "on"]
+      # v.customize ["usbfilter", "add", "0",  "--target", :id, "--name", "Intel NCS 1", "--active", "yes", "--vendorid", "03e7"]
+      # v.customize ["usbfilter", "add", "1",  "--target", :id, "--name", "Intel NCS 2", "--active", "yes", "--vendorid", "040e"]
+      # Set memory and vCPU
+      v.memory = MEMORY
+      v.cpus = CPUS
+    end
+  elsif provider == "parallels"
+    config.vm.provider "parallels" do |prl|
+      prl.memory = MEMORY
+      prl.cpus = CPUS
+    end
   end
-
   
   # Copy setup files into the VM
   config.vm.provision "file", source: "resources/" << $openVNIO_file, destination: "$HOME/intel_open_vino/" << $openVNIO_file
