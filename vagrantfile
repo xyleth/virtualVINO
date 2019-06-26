@@ -50,18 +50,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     network_configs.call override
   end
 
-  config.vm.provider :hyperv do |_, override|
-    config.vm.box = "generic/ubuntu1604"
-    config.vm.box_version = "1.9.16"
-    config.vm.network "public_network"
-    config.vm.provider "hyperv" do |hpv|
-      hpv.memory = MEMORY
-      hpv.cpus = CPUS
-      hpv.enable_virtualization_extensions = true 
-    end
-    network_configs.call override
-  end
-
   # Copy setup files into the VM
   config.vm.provision "file", source: "resources/" << $openVNIO_file, destination: "$HOME/intel_open_vino/" << $openVNIO_file
   config.vm.provision "file", source: "resources/silent_install.txt", destination: "$HOME/intel_open_vino/silent_install.txt"
