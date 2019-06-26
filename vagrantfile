@@ -50,6 +50,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     network_configs.call override
   end
 
+  config.vm.provider :kvm do |_, override|
+    # some code
+    network_configs.call override
+  end
+
   # Copy setup files into the VM
   config.vm.provision "file", source: "resources/" << $openVNIO_file, destination: "$HOME/intel_open_vino/" << $openVNIO_file
   config.vm.provision "file", source: "resources/silent_install.txt", destination: "$HOME/intel_open_vino/silent_install.txt"
