@@ -1,7 +1,7 @@
 ---
 configs:
-  #provider: 'parallels'
-  provider: 'virtualbox'
+  provider: 'parallels'
+  #provider: 'virtualbox'
   common:
     openvino: 'l_openvino_toolkit_p_2019.1.144.tgz'
     cpus: '2'
