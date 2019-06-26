@@ -1,0 +1,87 @@
+---
+# Dependinces for Intel OpenVINO on Ubuntu 16.04
+
+- name: install libpango1.0-dev
+  package:
+    name: libpango1.0-dev
+    state: present
+
+- name: install libcairo2-dev
+  package:
+    name: libcairo2-dev
+    state: present
+
+- name: install libglib2.0-dev 
+  package:
+    name: libglib2.0-dev
+    state: present
+
+- name: install libgtk2.0-dev 
+  package:
+    name: libgtk2.0-dev
+    state: present
+
+- name: install libswscale-dev 
+  package:
+    name: libswscale-dev
+    state: present
+
+- name: install libavcodec-dev
+  package:
+    name: libavcodec-dev
+    state: present
+
+- name: install libavformat-dev
+  package:
+    name: libavformat-dev
+    state: present
+
+- name: install libgstreamer1.0-0
+  package:
+    name: libgstreamer1.0-0
+    state: present
+
+- name: install gstreamer1.0-plugins-base
+  package:
+    name: gstreamer1.0-plugins-base
+    state: present
+
+- name: install build-essential
+  package:
+    name: build-essential
+    state: present
+
+- name: install cmake
+  package:
+    name: cmake
+    state: present
+
+- name: install libusb-1.0-0-dev
+  package:
+    name: libusb-1.0-0-dev
+    state: present
+
+- name: install libdrm-dev
+  package:
+    name: libdrm-dev
+    state: present
+
+- name: install libpng12-dev
+  package:
+    name: libpng12-dev
+    state: present
+
+- name: install python3-pip
+  package:
+    name: python3-pip
+    state: present
+
+- name: install python3-venv
+  package:
+    name: python3-venv
+    state: present
+
+- name: install libgfortran3
+  package:
+    name: libgfortran3
+    state: present

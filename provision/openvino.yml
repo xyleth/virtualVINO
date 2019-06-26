@@ -1,0 +1,40 @@
+---
+# Installation tasks for Intels OpenVINO distribution
+
+- name: Unpack OpenVINO installer
+  unarchive:
+      src: /home/vagrant/intel_open_vino/{{openVINO_archive}}
+      dest: /home/vagrant/intel_open_vino
+      remote_src: yes
+      owner: vagrant
+      creates: /home/vagrant/intel_open_vino/l_openvino_toolkit_p_{{openVINO_version}}
+
+- name: Install OpenVINO toolkit
+  command: /home/vagrant/intel_open_vino/l_openvino_toolkit_p_{{openVINO_version}}/install.sh --silent /home/vagrant/intel_open_vino/silent_install.txt
+  args:
+      chdir: /home/vagrant/intel_open_vino/l_openvino_toolkit_p_{{openVINO_version}}/
+      creates: /opt/intel/openvino_{{openVINO_version}}
+
+- name: Add environment variables to .bashrc for Vagrant user
+  lineinfile:
+      path: /home/vagrant/.bashrc
+      line: source /opt/intel/openvino/bin/setupvars.sh
+
+- name: Install framework dependencies
+  shell: /opt/intel/openvino/deployment_tools/model_optimizer/install_prerequisites/install_prerequisites.sh > /home/vagrant/model_deps_installed
+  args:
+      executable: /bin/bash
+      chdir: /opt/intel/openvino/deployment_tools/model_optimizer/install_prerequisites/
+      creates: /home/vagrant/model_deps_installed
+
+- name: Copy USB rules
+  copy:
+      src: /opt/intel/openvino/inference_engine/external/97-myriad-usbboot.rules
+      dest: /etc/udev/rules.d/97-myriad-usbboot.rules
+      remote_src: yes
+
+- name: adding vagrant user to the users group
+  user:
+      name: vagrant
+      groups: users
+      append: yes

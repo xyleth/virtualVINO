@@ -1,0 +1,18 @@
+---
+- name: Setup Intel OpenVINO toolkit
+  hosts: all
+  become: yes
+  vars:
+    openVINO_archive: l_openvino_toolkit_p_2019.1.144.tgz
+    openVINO_version: 2019.1.144
+
+  tasks:
+
+  - import_tasks: deps.yml
+  - import_tasks: openvino.yml
+  - import_tasks: desktop.yml
+  
+
+
+
+  

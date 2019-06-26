@@ -1,0 +1,41 @@
+---
+
+# Install and configure the Ubuntu desktop environment
+
+- name: install mate-core
+  package:
+    name: mate-core
+    state: present
+
+- name: install mate-desktop-environment 
+  package:
+    name: mate-desktop-environment
+    state: present
+
+- name: install mate-notification-daemon
+  package:
+    name: mate-notification-daemon
+    state: present
+
+- name: install xrdp
+  package:
+    name: xrdp
+    state: present
+
+- name: Copy startwm.sh
+  copy:
+      src: /home/vagrant/startwm.sh
+      dest: /etc/xrdp/startwm.sh
+      remote_src: yes
+
+- name: Backup keyboard map
+  copy:
+      src: /etc/xrdp/km-0409.ini 
+      dest: /etc/xrdp/km-0409.old
+      remote_src: yes
+
+- name: Copy keyboard map
+  copy:
+      src: /home/vagrant/km-0809.ini
+      dest: /etc/xrdp/km-0409.ini
+      remote_src: yes

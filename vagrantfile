@@ -1,0 +1,55 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+$script = <<SCRIPT
+# TODO: Put your install script here.
+SCRIPT
+
+# Change this to the name of the OpenVINO toolkit downloaded from Intel that you placed in the resources sub-directory
+# Tested with l_openvino_toolkit_p_2019.1.144.tgz
+# If this changes don't forget up update the openVINO_archive and openVINO_version variables in the provision/playbook.yml file
+$openVNIO_file = "l_openvino_toolkit_p_2019.1.144.tgz"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # All Vagrant configuration is done here. The most common configuration
+  # options are documented and commented below. For a complete reference,
+  # please see the online documentation at vagrantup.com.
+
+  # Every Vagrant virtual environment requires a box to build off of.
+  # Official boxes are here: https://atlas.hashicorp.com/boxes/search
+  # Additional boxes here: http://www.vagrantbox.es/
+  config.vm.box = "ubuntu/xenial64"
+  config.vm.box_version = "20190617.0.0"
+
+  # Port forwarding examples
+  # Just in case you need to run a database server, web server, etc.
+  # Port forward for RDP
+  config.vm.network "forwarded_port", guest: 3389, host: 8389
+
+  # Mem/cpu config example.
+  # If you need more CPUs/RAM, uncomment the next 4 lines and edit as needed.
+  config.vm.provider "virtualbox" do |v|
+    # These lines configure the USB forwarding into the VM for the NCS
+    v.customize ["modifyvm", :id, "--usbxhci", "on"]
+    v.customize ["usbfilter", "add", "0",  "--target", :id, "--name", "Intel NCS 1", "--active", "yes", "--vendorid", "03e7"]
+    v.customize ["usbfilter", "add", "1",  "--target", :id, "--name", "Intel NCS 2", "--active", "yes", "--vendorid", "040e"]
+    # Set memory and vCPU values here.  Adjust if required for your local machine
+    v.memory = 3072
+    v.cpus = 2
+  end
+
+  
+  # Copy setup files into the VM
+  config.vm.provision "file", source: "resources/" << $openVNIO_file, destination: "$HOME/intel_open_vino/" << $openVNIO_file
+  config.vm.provision "file", source: "resources/silent_install.txt", destination: "$HOME/intel_open_vino/silent_install.txt"
+  config.vm.provision "file", source: "resources/startwm.sh", destination: "$HOME/startwm.sh"
+  config.vm.provision "file", source: "resources/km-0809.ini", destination: "$HOME/km-0809.ini"
+  # Run the Ansible playbook to provision everything
+  config.vm.provision "ansible_local" do |ansible|
+    ansible.playbook = "provision/playbook.yml"
+  end
+
+end
