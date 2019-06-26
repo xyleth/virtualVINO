@@ -1,17 +1,20 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+require 'yaml'
+
+current_dir    = File.dirname(File.expand_path(__FILE__))
+configs        = YAML.load_file("#{current_dir}/config.yaml")
+provider_config = configs['configs'][configs['configs']['provider']]
+common_config = configs['configs']['common']
+provider = configs['configs']['provider']
+
+puts provider
+puts provider_config['box']
+puts provider_config['box_version']
+
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
-
-# Change this to the name of the OpenVINO toolkit downloaded from Intel that you placed in the resources sub-directory
-# Tested with l_openvino_toolkit_p_2019.1.144.tgz
-# If this changes don't forget up update the openVINO_archive and openVINO_version variables in the provision/playbook.yml file
-$openVNIO_file = "l_openvino_toolkit_p_2019.1.144.tgz"
-
-# Change these variables to control CPU and Memory sizing
-CPUS = 2
-MEMORY = 3072
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # All Vagrant configuration is done here. The most common configuration
@@ -19,44 +22,28 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # please see the online documentation at vagrantup.com.
 
   # shared networking configuration
-  network_configs = lambda do |network|
-    # Port forward for RDP
-    network.vm.network "forwarded_port", guest: 3389, host: 8389
-  end
+  config.vm.network "forwarded_port", guest: 3389, host: 8389
+  
+  config.vm.box = provider_config['box']
+  config.vm.box_version = provider_config['box_version']
 
-  config.vm.provider :virtualbox do |_, override|
-    config.vm.box = "ubuntu/xenial64"
-    config.vm.box_version = "20190617.0.0"
+  if provider == 'virtualbox'
+  puts 'Running Virtual box config'
     config.vm.provider "virtualbox" do |v|
-      # These lines configure the USB forwarding into the VM for the NCS
-      # Depreciated due to licensing issues with the virtualbox extension pack
-      # v.customize ["modifyvm", :id, "--usbxhci", "on"]
-      # v.customize ["usbfilter", "add", "0",  "--target", :id, "--name", "Intel NCS 1", "--active", "yes", "--vendorid", "03e7"]
-      # v.customize ["usbfilter", "add", "1",  "--target", :id, "--name", "Intel NCS 2", "--active", "yes", "--vendorid", "040e"]
       # Set memory and vCPU
-      v.memory = MEMORY
-      v.cpus = CPUS
+      v.memory = common_config['memory']
+      v.cpus = common_config['cpus']
     end
-    network_configs.call override
-  end
-
-  config.vm.provider :parallels do |_, override|
-    config.vm.box = "parallels/ubuntu-16.04"
-    config.vm.box_version = "2.0.5"
+  elsif provider == 'parallels'
+  puts 'Running Parallels config'
     config.vm.provider "parallels" do |prl|
-      prl.memory = MEMORY
-      prl.cpus = CPUS
+      prl.memory = common_config['memory']
+      prl.cpus = common_config['cpus']
     end
-    network_configs.call override
-  end
-
-  config.vm.provider :kvm do |_, override|
-    # some code
-    network_configs.call override
   end
 
   # Copy setup files into the VM
-  config.vm.provision "file", source: "resources/" << $openVNIO_file, destination: "$HOME/intel_open_vino/" << $openVNIO_file
+  config.vm.provision "file", source: "resources/" << common_config['openvino'], destination: "$HOME/intel_open_vino/" << common_config['openvino']
   config.vm.provision "file", source: "resources/silent_install.txt", destination: "$HOME/intel_open_vino/silent_install.txt"
   config.vm.provision "file", source: "resources/startwm.sh", destination: "$HOME/startwm.sh"
   config.vm.provision "file", source: "resources/km-0809.ini", destination: "$HOME/km-0809.ini"
