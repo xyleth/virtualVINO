@@ -58,7 +58,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       hpv.memory = MEMORY
       hpv.cpus = CPUS
       hpv.enable_virtualization_extensions = true 
-      hpv.differencing_disk = true
     end
     network_configs.call override
   end
