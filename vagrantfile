@@ -9,10 +9,6 @@ provider_config = configs['configs'][configs['configs']['provider']]
 common_config = configs['configs']['common']
 provider = configs['configs']['provider']
 
-puts provider
-puts provider_config['box']
-puts provider_config['box_version']
-
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 
@@ -28,14 +24,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box_version = provider_config['box_version']
 
   if provider == 'virtualbox'
-  puts 'Running Virtual box config'
     config.vm.provider "virtualbox" do |v|
       # Set memory and vCPU
       v.memory = common_config['memory']
       v.cpus = common_config['cpus']
     end
   elsif provider == 'parallels'
-  puts 'Running Parallels config'
     config.vm.provider "parallels" do |prl|
       prl.memory = common_config['memory']
       prl.cpus = common_config['cpus']
