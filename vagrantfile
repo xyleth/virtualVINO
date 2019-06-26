@@ -50,8 +50,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     network_configs.call override
   end
 
-  config.vm.provider :kvm do |_, override|
-    # some code
+  config.vm.provider :hyperv do |_, override|
+    config.vm.box = "generic/ubuntu1604"
+    config.vm.box_version = "1.9.16"
+    config.vm.provider "hyperv" do |hpv|
+      hpv.memory = MEMORY
+      hpv.cpus = CPUS
+    end
     network_configs.call override
   end
 
