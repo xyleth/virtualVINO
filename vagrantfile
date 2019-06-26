@@ -34,8 +34,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Every Vagrant virtual environment requires a box to build off of.
   # Official boxes are here: https://atlas.hashicorp.com/boxes/search
   # Additional boxes here: http://www.vagrantbox.es/
-  config.vm.box = "generic/ubuntu1604"
-  config.vm.box_version = "1.9.16"
+  config.vm.box = "ubuntu/xenial64"
+  config.vm.box_version = "20190617.0.0"
 
   # Port forwarding examples
   # Just in case you need to run a database server, web server, etc.
