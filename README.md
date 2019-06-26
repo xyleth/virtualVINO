@@ -34,6 +34,7 @@ Then go and get a coffee, this process will take a while - typically 15/20 minut
 Once the machine is built you can connect to it with the standard `vagrant ssh` in most cases.  Or you can connect to the Mate GUI by establishing a RDP session to the VM over port 8389 (typically to 127.0.0.1:8389).  The username is `vagrant` and the password is also `vagrant` out of the box.  Once you have a terminal on the VM run the following commands:
 
 `cd /opt/intel/openvino/deployment_tools/demo`
+
 `./demo_squeezenet_download_convert_run.sh`
 
 and
