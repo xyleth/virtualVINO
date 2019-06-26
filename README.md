@@ -15,9 +15,9 @@ You need to have Vagrant installed with a provider for your hypervisor of choice
 
 For parallels you add the provider with `vagrant plugin install vagrant-parallels`
 
-Before the first run edit the `config.yml` file in this directory and make sure that the correct `provider:` line is uncommented for your hypervisor.  Change this if necessary.
+Before the first run edit the `config.yaml` file in this directory and make sure that the correct `provider:` line is uncommented for your hypervisor.  Change this if necessary.
 
-You can also edit how many vCPUs and how much memory is allocated to the VM using the relevant lines in `config.yml`.
+You can also edit how many vCPUs and how much memory is allocated to the VM using the relevant lines in `config.yaml`.
 
 ## OpenVNIO toolkit
 
