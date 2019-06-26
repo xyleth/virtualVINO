@@ -1,18 +1,5 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-require 'optparse'
-
-def get_provider
-  ret = nil
-  opt_parser = OptionParser.new do |opts|
-    opts.on("--provider provider") do |provider|
-      ret = provider
-    end
-  end
-  opt_parser.parse!(ARGV)
-  ret
-end
-provider = get_provider || "virtualbox"
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
@@ -34,33 +21,43 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Every Vagrant virtual environment requires a box to build off of.
   # Official boxes are here: https://atlas.hashicorp.com/boxes/search
   # Additional boxes here: http://www.vagrantbox.es/
-  if provider == "virtualbox"
-    config.vm.box = "ubuntu/xenial64"
-    config.vm.box_version = "20190617.0.0"
-    config.vm.provider "virtualbox" do |v|
-      # These lines configure the USB forwarding into the VM for the NCS
-      # Depreciated due to licensing issues with the virtualbox extension pack
-      # v.customize ["modifyvm", :id, "--usbxhci", "on"]
-      # v.customize ["usbfilter", "add", "0",  "--target", :id, "--name", "Intel NCS 1", "--active", "yes", "--vendorid", "03e7"]
-      # v.customize ["usbfilter", "add", "1",  "--target", :id, "--name", "Intel NCS 2", "--active", "yes", "--vendorid", "040e"]
-      # Set memory and vCPU
-      v.memory = MEMORY
-      v.cpus = CPUS
+    # shared networking configuration
+    network_configs = lambda do |network|
+      # Port forward for RDP
+      network.vm.network "forwarded_port", guest: 3389, host: 8389
     end
-  elsif provider == "parallels"
-    config.vm.box = "parallels/ubuntu-16.04"
-    config.vm.box_version = "2.0.5"
-    config.vm.provider "parallels" do |prl|
-      prl.memory = MEMORY
-      prl.cpus = CPUS
-    end
-  end
-
-  # Port forwarding examples
-  # Just in case you need to run a database server, web server, etc.
-  # Port forward for RDP
-  config.vm.network "forwarded_port", guest: 3389, host: 8389
   
+    config.vm.provider :virtualbox do |_, override|
+      config.vm.box = "ubuntu/xenial64"
+      config.vm.box_version = "20190617.0.0"
+      config.vm.provider "virtualbox" do |v|
+        # These lines configure the USB forwarding into the VM for the NCS
+        # Depreciated due to licensing issues with the virtualbox extension pack
+        # v.customize ["modifyvm", :id, "--usbxhci", "on"]
+        # v.customize ["usbfilter", "add", "0",  "--target", :id, "--name", "Intel NCS 1", "--active", "yes", "--vendorid", "03e7"]
+        # v.customize ["usbfilter", "add", "1",  "--target", :id, "--name", "Intel NCS 2", "--active", "yes", "--vendorid", "040e"]
+        # Set memory and vCPU
+        v.memory = MEMORY
+        v.cpus = CPUS
+      end
+      network_configs.call override
+    end
+  
+    config.vm.provider :parallels do |_, override|
+      config.vm.box = "parallels/ubuntu-16.04"
+      config.vm.box_version = "2.0.5"
+      config.vm.provider "parallels" do |prl|
+        prl.memory = MEMORY
+        prl.cpus = CPUS
+      end
+      network_configs.call override
+    end
+  
+    config.vm.provider :kvm do |_, override|
+      # some code
+      network_configs.call override
+    end
+
   # Copy setup files into the VM
   config.vm.provision "file", source: "resources/" << $openVNIO_file, destination: "$HOME/intel_open_vino/" << $openVNIO_file
   config.vm.provision "file", source: "resources/silent_install.txt", destination: "$HOME/intel_open_vino/silent_install.txt"
