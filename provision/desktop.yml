@@ -17,6 +17,11 @@
     name: mate-notification-daemon
     state: present
 
+- name: install Firefox
+  package:
+    name: firefox
+    state: present
+
 - name: install xrdp
   package:
     name: xrdp
