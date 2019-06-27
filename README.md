@@ -28,7 +28,7 @@ You will also need to download and install the Intel openVINO toolkit from Intel
 
 ## Known issue
 
-Due to the way git handles line endings by default there is an issue with two of the files being changed from LF to CRLF which causes issues within the VM.  To fix you need to change the endings of resources/startwm.sh and resources/silent_install.txt from CRLF back to LF.  Visual Studio Code is good for this.  *This should be done before the first vagrant up*
+Due to the way git handles line endings by default there is an issue with two of the files being changed from LF to CRLF which causes issues within the VM.  To fix you need to change the endings of resources/startwm.sh and resources/silent_install.txt from CRLF back to LF.  Visual Studio Code is good for this.  **This should be done before the first vagrant up**
 
 ## Ready to go
 
