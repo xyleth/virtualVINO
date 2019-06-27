@@ -1,0 +1,14 @@
+---
+configs:
+  #provider: 'parallels'
+  provider: 'virtualbox'
+  common:
+    openvino: 'l_openvino_toolkit_p_2019.1.144.tgz'
+    cpus: '2'
+    memory: '3072'
+  parallels:
+    box: 'parallels/ubuntu-16.04'
+    box_version: '2.0.5'
+  virtualbox:
+    box: 'ubuntu/xenial64'
+    box_version: '20190617.0.0'

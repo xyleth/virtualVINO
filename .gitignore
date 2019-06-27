@@ -6,3 +6,6 @@
 
 # Ignore archives files in resources
 resources/*.tgz
+
+# Ignore the machine specific config file
+config.yaml
