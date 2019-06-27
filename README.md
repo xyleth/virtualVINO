@@ -26,6 +26,10 @@ You can also edit how many vCPUs and how much memory is allocated to the VM usin
 
 You will also need to download and install the Intel openVINO toolkit from Intel's website.  This package is developed with the 2019.1.144 version, other versions may work but have not been tested.  Once you have downloaded the archive place it in the resources subdirectory of this folder.
 
+## Known issue
+
+Due to the way git handles line endings by default there is an issue with two of the files being changed from LF to CRLF which causes issues within the VM.  To fix you need to change the endings of resources/startwm.sh and resources/silent_install.txt from CRLF back to LF.  Visual Studio Code is good for this.  *This should be done before the first vagrant up*
+
 ## Ready to go
 
 Once you have completed the above steps open your favorite terminal, cd into this directory and issue the following command:
@@ -45,3 +49,4 @@ and
 `./demo_security_barrier_camera.sh`
 
 noting that the security barrier demo will only run over an RDP session in the Mate desktop.  The first demo will run on a text console via SSH and is useful for inital testing.
+
