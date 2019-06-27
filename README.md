@@ -15,7 +15,10 @@ You need to have Vagrant installed with a provider for your hypervisor of choice
 
 For parallels you add the provider with `vagrant plugin install vagrant-parallels`
 
-Before the first run edit the `config.yaml` file in this directory and make sure that the correct `provider:` line is uncommented for your hypervisor.  Change this if necessary.
+Before the first run:
+- copy the `config.example` file to `config.yaml` 
+- edit the resulting `config.yaml` file 
+- make sure that the correct `provider:` line is uncommented for your hypervisor.
 
 You can also edit how many vCPUs and how much memory is allocated to the VM using the relevant lines in `config.yaml`.
 
@@ -42,3 +45,4 @@ and
 `./demo_security_barrier_camera.sh`
 
 noting that the security barrier demo will only run over an RDP session in the Mate desktop.  The first demo will run on a text console via SSH and is useful for inital testing.
+
