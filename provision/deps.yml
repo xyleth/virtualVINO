@@ -39,7 +39,7 @@
 - name: install libgstreamer1.0-0
   package:
     name: libgstreamer1.0-0
-    state: present
+    state: pressent
 
 - name: install gstreamer1.0-plugins-base
   package:
@@ -66,10 +66,21 @@
     name: libdrm-dev
     state: present
 
-- name: install libpng12-dev
+- name: install libpng12-dev for Ubuntu 16.04
   package:
     name: libpng12-dev
     state: present
+    when:
+        - ansible_facts['distribution'] == "Ubuntu"
+        - ansible_facts['distribution_major_version'] == "16"
+
+- name: install libpng-dev for Ubuntu 18.04
+  package:
+    name: libpng-dev
+    state: present
+    when:
+        - ansible_facts['distribution'] == "Ubuntu"
+        - ansible_facts['distribution_major_version'] == "18.04"
 
 - name: install python3-pip
   package:
