@@ -39,7 +39,7 @@
 - name: install libgstreamer1.0-0
   package:
     name: libgstreamer1.0-0
-    state: pressent
+    state: present
 
 - name: install gstreamer1.0-plugins-base
   package:
