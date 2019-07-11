@@ -72,7 +72,7 @@
     state: present
     when:
         - ansible_facts['distribution'] == "Ubuntu"
-        - ansible_facts['distribution_major_version'] == "16"
+        - ansible_facts['distribution_version'] == "16.04"
 
 - name: install libpng-dev for Ubuntu 18.04
   package:
@@ -80,7 +80,7 @@
     state: present
     when:
         - ansible_facts['distribution'] == "Ubuntu"
-        - ansible_facts['distribution_major_version'] == "18.04"
+        - ansible_facts['distribution_version'] == "18.04"
 
 - name: install python3-pip
   package:
