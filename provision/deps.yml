@@ -134,16 +134,4 @@
     recurse: yes
     owner: vagrant
     group: vagrant
-
-- name: Get nano syntax files
-  git:
-    repo: https://github.com/scopatz/nanorc.git
-    dest: "/vagrant/home/.nano"
-
-- name: Set file ownership for nano files
-  file:
-    path: /home/vagrant/.nano
-    state: directory
-    recurse: yes
-    owner: vagrant
-    group: vagrant
+    
