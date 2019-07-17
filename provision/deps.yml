@@ -113,3 +113,11 @@
     src: "/home/vagrant/.oh-my-zsh_dracula_theme/dracula.zsh-theme"
     dest: "/home/vagrant/.oh-my-zsh/themes/dracula.zsh-theme"
     state: link
+
+- name: Set file ownership for oh-my-ZSH files
+  file:
+    path: /home/vagrant/.oh-my-zsh
+    state: directory
+    recurse: yes
+    owner: vagrant
+    group: vagrant
