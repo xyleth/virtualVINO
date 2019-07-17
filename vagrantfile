@@ -41,6 +41,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "file", source: "resources/silent_install.txt", destination: "$HOME/intel_open_vino/silent_install.txt"
   config.vm.provision "file", source: "resources/startwm.sh", destination: "$HOME/startwm.sh"
   config.vm.provision "file", source: "resources/km-0809.ini", destination: "$HOME/km-0809.ini"
+  config.vm.provision "file", source: "resources/dot.zshrc", destination: "$HOME/.zshrc"
   # Run the Ansible playbook to provision everything
   config.vm.provision "ansible_local" do |ansible|
     ansible.playbook = "provision/playbook.yml"

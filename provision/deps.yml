@@ -91,6 +91,21 @@
     name: zsh
     state: present
 
+- name: install autojump
+  package:
+    name: autojump
+    state: present
+
+- name: install fzf
+  package:
+    name: fzf
+    state: present
+
+- name: install fd
+  package:
+    name: fd
+    state: present
+
 # Set ZSH as the default shell
 - name: Set ZSH as vagrant users shell
   user:
@@ -117,6 +132,14 @@
 - name: Set file ownership for oh-my-ZSH files
   file:
     path: /home/vagrant/.oh-my-zsh
+    state: directory
+    recurse: yes
+    owner: vagrant
+    group: vagrant
+
+- name: Set file ownership for oh-my-ZSH theme files
+  file:
+    path: /home/vagrant/.oh-my-zsh_dracula_theme
     state: directory
     recurse: yes
     owner: vagrant
