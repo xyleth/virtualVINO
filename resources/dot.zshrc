@@ -113,6 +113,9 @@ export PATH=/usr/local/bin:$PATH
 #source .functions
 #source .aliases
 
+# Load openVINO vars
+source /opt/intel/openvino/bin/setupvars.sh
+
 # This should be the last line of the file
 # For local changes
 # Don't make edits below this
