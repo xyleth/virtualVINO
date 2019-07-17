@@ -85,3 +85,31 @@
   package:
     name: libgfortran3
     state: present
+
+- name: install zsh
+  package:
+    name: zsh
+    state: present
+
+# Set ZSH as the default shell
+- name: Set ZSH as vagrant users shell
+  user:
+    name: vagrant
+    shell: /usr/bin/zsh
+
+# Install oh-my-zsh
+- name: setting up zsh with oh-my-zsh
+  git:
+    repo: https://github.com/robbyrussell/oh-my-zsh.git
+    dest: "/home/vagrant/.oh-my-zsh"
+
+- name: getting dracula theme for oh-my-zsh
+  git:
+    repo: https://github.com/dracula/zsh.git
+    dest: "/home/vagrant/.oh-my-zsh_dracula_theme"
+
+- name: sym linking oh-my-zsh theme
+  file:
+    src: "/home/vagrant/.oh-my-zsh_dracula_theme/dracula.zsh-theme"
+    dest: "/home/vagrant/.oh-my-zsh/themes/dracula.zsh-theme"
+    state: link
